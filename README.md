@@ -16,4 +16,4 @@ This repository provides tools and scripts for:
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
-The work is supported by the Spoke 1 ``FutureHPC \& BigData'' and the Spoke 3 ``Astrophysics and Cosmos Observations'' of the ICSC – Centro Nazionale di Ricerca in High Performance Computing, Big Data and Quantum Computing – and hosting entity, funded by European Union – NextGenerationEU.
+The work is supported by the Spoke 1 ``FutureHPC & BigData`` and the Spoke 3 ``Astrophysics and Cosmos Observation`` of the ICSC – Centro Nazionale di Ricerca in High Performance Computing, Big Data and Quantum Computing – and hosting entity, funded by European Union – NextGenerationEU.
