@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import torch
 from PIL import Image
 import matplotlib.patches as mpatches
+import cv2
 
 class ImgEQ:
     def __init__(self, dataset):
@@ -228,7 +229,7 @@ class ImgEQ:
         plt.axis('off')  # Nasconde gli assi
         plt.show()
 
-    def get_superposed_image(self, img, target, alpha=0.5):
+    def get_superposed_image(self, img, target, alpha=0.5, type='contours'):
         """
         Returns an overlay of the image and target with a given alpha.
 
@@ -248,7 +249,10 @@ class ImgEQ:
         if not isinstance(img, np.ndarray) or not isinstance(target, np.ndarray):
             raise TypeError("'img' and 'target' must be numpy arrays or 'img' must be an integer index.")
         
-        return self.overlay(img, target, alpha=alpha)
+        if type == 'overlay':
+            return self.overlay(img, target, alpha=alpha)
+        elif type == 'contours':
+            return self.overlay_contours(img, target, alpha=alpha)
     
     def save_from_np(self, np_image, save_path):
         """
@@ -264,3 +268,19 @@ class ImgEQ:
         # Convert to PIL Image and save
         image = Image.fromarray((np.clip(np_image, 0, 1) * 255).astype(np.uint8))
         image.save(save_path)
+
+    def overlay_contours(self, img: np.ndarray, mask: np.ndarray, alpha: float = .5) -> np.ndarray:
+        img_f = img.astype(np.float32)
+        if img_f.max() > 1:
+            img_f /= 255.0
+
+        if mask.ndim == 3 and mask.shape[2] == 3:
+            mask = cv2.cvtColor(mask.astype(np.uint8), cv2.COLOR_RGB2GRAY)
+        elif mask.dtype != np.uint8:
+            mask = (mask * 255).astype(np.uint8) if mask.max() <= 1 else mask.astype(np.uint8)
+
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        img_contours = cv2.drawContours(img_f.copy(), contours, -1, (0, 0, 255), thickness=2)
+
+  
+        return img_contours
